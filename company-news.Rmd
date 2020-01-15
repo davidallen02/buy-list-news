@@ -1,0 +1,38 @@
+---
+title: 'Buy List News'
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+```{r, results='asis', echo=FALSE, message=FALSE,}
+library(magrittr)
+library(tidyverse)
+
+
+news <- read.table('./company-news.txt', 
+                   header = FALSE, 
+                   sep = '\t', 
+                   quote = "\"",
+                   colClasses = 'character') %>%
+   set_colnames(c('date','ticker','newsItem')) %>%
+   remove_rownames %>%
+   mutate(
+      ticker = ticker %>% toupper,
+      date = date %>% as.Date(format = '%Y-%m-%d') 
+   ) %>%
+   arrange(ticker, date) %>%
+   mutate(
+      date = date %>% format('%b %d, %Y')
+   )
+
+for(i in 1:nrow(news)){
+   cat('#', news$ticker[i], '\n')
+   cat('**', news$date[i], '**  \n', sep = '')
+   cat(news$newsItem[i], '  \n\n')
+}
+
+
+
+```
+
