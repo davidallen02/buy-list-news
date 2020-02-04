@@ -1,25 +1,31 @@
 ---
-title: 'Buy List News'
+title: '`r params$ticker %>% toupper` News'
+author:
+params:
+   ticker: 'aapl'
 output:
   pdf_document: default
   html_document: default
   word_document: default
+  
 ---
 ```{r, results='asis', echo=FALSE, message=FALSE,}
 library(magrittr)
 library(tidyverse)
 
 
-news <- read.table('./company-news.txt', 
-                   header = FALSE, 
-                   sep = '\t', 
-                   quote = "\"",
-                   colClasses = 'character') %>%
+news <- readr::read_tsv(
+   file       = './company-news.txt', 
+   col_names  = FALSE, 
+   col_types  = 'Dcc',
+   quote      = "") %>%
    set_colnames(c('date','ticker','newsItem')) %>%
+   dplyr::filter(ticker == params$ticker) %>%
    remove_rownames %>%
    mutate(
-      ticker = ticker %>% toupper,
-      date = date %>% as.Date(format = '%Y-%m-%d') 
+      ticker    = ticker %>% toupper,
+      date      = date %>% as.Date(format = '%Y-%m-%d',),
+      newsItem  = newsItem %>% stringr::str_to_sentence()
    ) %>%
    arrange(ticker, date) %>%
    mutate(
@@ -27,9 +33,11 @@ news <- read.table('./company-news.txt',
    )
 
 for(i in 1:nrow(news)){
-   cat('#', news$ticker[i], '\n')
-   cat('**', news$date[i], '**  \n', sep = '')
-   cat(news$newsItem[i], '  \n\n')
+   # cat('#', news$ticker[i], '\n')
+   # cat('**', news$date[i], '**  \n', sep = '')
+   cat('**',news$date[i], '**  \n', sep ='')
+   
+   cat(news$newsItem[i], '  \n  \n  \n')
 }
 
 
