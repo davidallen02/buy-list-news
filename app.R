@@ -4,8 +4,8 @@ library(shiny)
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Company News"),
    
+   titlePanel("Company News"),
       
       # Show a plot of the generated distribution
       mainPanel(
