@@ -24,8 +24,7 @@ news <- readr::read_tsv(
    remove_rownames %>%
    mutate(
       ticker    = ticker %>% toupper,
-      date      = date %>% as.Date(format = '%Y-%m-%d',),
-      newsItem  = newsItem %>% stringr::str_to_sentence()
+      date      = date %>% as.Date(format = '%Y-%m-%d')
    ) %>%
    arrange(ticker, date) %>%
    mutate(
