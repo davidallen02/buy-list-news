@@ -2,7 +2,7 @@
 title: '`r params$ticker %>% toupper` News'
 author:
 params:
-   ticker: 'aapl'
+   ticker: 'baba'
 output:
   pdf_document: default
   html_document: default
